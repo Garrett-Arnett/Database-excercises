@@ -2,8 +2,8 @@ USE employees;
 SELECT * FROM employees;
 SELECT Count(*) FROM employees WHERE first_name IN ('IRENA','Vidya','Maya');
 -- There are 709 people with those first names
-SELECT Count(*) FROM employees WHERE first_name = 'IRENA' OR 'Vidya' OR 'Maya';
--- When using OR. 241 employees pop up.alter
+SELECT Count(*) FROM employees WHERE first_name = 'IRENA' OR first_name = 'Vidya' OR first_name = 'Maya';
+-- When using OR. 709 employees pop up.alter
 SELECT Count(*) FROM employees WHERE gender = 'M' AND first_name = 'IRENA' OR 'Vidya' OR 'Maya';
 -- There are 144 employees that match the statement above.
 SELECT Count(*) FROM employees WHERE last_name LIKE 'E%';
