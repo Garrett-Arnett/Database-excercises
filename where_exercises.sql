@@ -4,8 +4,8 @@ SELECT Count(*) FROM employees WHERE first_name IN ('IRENA','Vidya','Maya');
 -- There are 709 people with those first names
 SELECT Count(*) FROM employees WHERE first_name = 'IRENA' OR first_name = 'Vidya' OR first_name = 'Maya';
 -- When using OR. 709 employees pop up.alter
-SELECT Count(*) FROM employees WHERE gender = 'M' AND first_name = 'IRENA' OR 'Vidya' OR 'Maya';
--- There are 144 employees that match the statement above.
+SELECT Count(*) FROM employees WHERE gender = 'M' AND (first_name = 'IRENA' OR first_name = 'Vidya' OR first_name = 'Maya');
+-- There are 441 employees that match the statement above.
 SELECT Count(*) FROM employees WHERE last_name LIKE 'E%';
 -- There are 7330 current/previous employees that have a last name staring with the letter e;
 SELECT Count(*) FROM employees WHERE last_name LIKE '%E' and last_name NOT LIKE 'E%';
