@@ -99,5 +99,14 @@ WHERE
 GROUP BY emp_no;
 
 
--- Find the average salary for each employee where that average salary is between $80k and $90k.
+-- Find the average salary for each employee where that average salary 
+-- is between $80k and $90k.
 
+SELECT 
+	emp_no, AVG(salary) 
+FROM 
+	salaries 
+WHERE 
+	salary between 80000 and 90000 
+GROUP BY 
+	emp_no;
