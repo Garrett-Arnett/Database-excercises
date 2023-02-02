@@ -43,6 +43,17 @@ join employees on employees.emp_no = dept_manager.emp_no
 where dept_manager.to_date > curdate()
 order by dept_name;
 
+-- review
+-- join = inner join
+
+select dept.dept_name, concat(emp.first_name,' ',emp.last_name) as emp_name
+from departments as dept
+	join dept_manager as dm
+		using (dept_no)
+	join employees as emp
+		using (emp_no)
+where to_date > Now();
+
 -- Find the name of all departments managed by women
 
 select dept_name as "Department Name", Concat(first_name," ",last_name) as "Department Manager"
@@ -53,44 +64,72 @@ where gender like "f"
 and dept_manager.to_date > curdate()
 order by dept_name;
 
+-- review
+
+select departments.dept_name,
+concat(employees.first_name,' ', employees.last_name) as full_name
+from departments
+	join dept_manager 
+		using (dept_no)
+	join employees
+		using (emp_no)
+where to_date > now()
+and gender = 'f'
+order by dept_name;
 
 
 -- Find the current titles of employees currently working in the 
 -- Customer Service department.
 
 Select title, count(title) as Count
-From titles
-join employees using(emp_no)
-join dept_emp on employees.emp_no = dept_emp.emp_no
-join departments on departments.dept_no = dept_emp.dept_no
+	From titles
+		join employees 
+			using(emp_no)
+		join dept_emp 
+			on employees.emp_no = dept_emp.emp_no
+		join departments 
+			on departments.dept_no = dept_emp.dept_no
 Where dept_emp.to_date > curdate()
-AND titles.to_date > curdate()
-AND dept_name Like "customer service"
+	AND titles.to_date > curdate()
+	AND dept_name Like "customer service"
 group by title
 order by title;
 
 -- or 
 
-SELECT dept_no, dept_name, COUNT(*) num_employees
-FROM employees
-	JOIN dept_emp de 
-		USING (emp_no)
-	JOIN departments
-		USING (dept_no)
-WHERE de.to_date > NOW()
-GROUP BY dept_name;
-
+select title, count(*)
+from titles
+join dept_emp on titles.emp_no = dept_emp.dept_no
+join departments on departments.dept_no = dept_emp.dept_no
+where dept_emp.to_date > now()
+and titles.to_date > now()
+and dept_name = 'Customer Service'
+group by title;
 
 -- Find the current salary of all current managers.
 
-Select dept_name as "Department Name", concat(first_name," ", last_name), salary as Salary
+Select dept_name as "Department Name", concat(first_name," ", last_name) as 'Full Name', salary as Salary
 from salaries
-Join employees using(emp_no)
-Join dept_manager using(emp_no)
-Join departments using(dept_no)
+	Join employees 
+		using(emp_no)
+	Join dept_manager 
+		using(emp_no)
+	Join departments 
+		using(dept_no)
 Where salaries.to_date > curdate()
 And dept_manager.to_date > curdate()
 Order By dept_name;
+
+-- review
+
+select first_name, last_name, salary
+from dept_manager as dm
+	join salaries as s
+		using (emp_no)
+	join employees
+		using (emp_no)
+where dm.to_date > now()
+and s.to_date > Now();
 
 -- Find the number of current employees in each department.
 
@@ -101,32 +140,74 @@ where dept_emp.to_date > curdate()
 group by dept_no
 order by dept_no;
 
+-- review
+
+select dept_no, dept_name, count(*) num_employees
+from employees
+	join dept_emp de
+		using (emp_no)
+	join departments
+		using (dept_no)
+where de.to_date > now()
+group by dept_no;
 
 -- Which department has the highest average salary? Hint: Use current not historic information.
 
 Select dept_name, avg(salary) as "average salary"
 from salaries
-join dept_emp using(emp_no)
-join departments using(dept_no)
+	join dept_emp 
+		using(emp_no)
+	join departments 
+		using(dept_no)
 Where salaries.to_date > curdate()
 And dept_emp.to_date > curdate()
 group by dept_name
 Order by avg(salary) DESC
 Limit 1;
 
+-- review
 
+select dept_name, avg(salary) as avg_sal
+from salaries s
+	join dept_emp de
+		using (emp_no)
+	join departments 
+		using (dept_no)
+where de.to_date > now()
+and s.to_date > now()
+group by dept_name
+order by avg_sal desc
+limit 1;       
 -- Who is the highest paid employee in the Marketing department?
 
 Select first_name, last_name, salary
 from employees 
-join salaries using(emp_no)
-join dept_emp using(emp_no)
-join departments using(dept_no)
+	join salaries 
+		using(emp_no)
+	join dept_emp 
+		using(emp_no)
+	join departments 
+		using(dept_no)
 Where dept_name = "marketing"
 and salaries.to_date > curdate()
 Order by salary DESC
 Limit 1;
 
+-- review
+
+select first_name, last_name, salary, dept_name
+from employees e
+	join dept_emp de
+		using (emp_no)
+	join departments d
+		using (dept_no)
+	join salaries s
+		using (emp_no)
+where dept_name = 'Marketing'
+and de.to_date > NOW()
+and s.to_date > NOW()
+order by salary desc
+limit 1;
 -- Which current department manager has the highest salary?
 
 Select first_name, last_name, salary, dept_name
@@ -139,6 +220,21 @@ and salaries.to_date > curdate()
 Order by salary desc
 limit 1;
 
+-- review
+
+select first_name, last_name, salary, dept_name
+from dept_manager dm
+	join employees
+		using (emp_no)
+	join salaries s
+		using (emp_no)
+	join departments
+		Using (dept_no)
+where dm.to_date > NOW()
+and s.to_date > now()
+order by salary desc
+limit 1;
+
 -- Determine the average salary for each department. Use all salary information and round your results.
 
 
@@ -149,7 +245,15 @@ Join salaries on dept_emp.emp_no = salaries.emp_no
 group by dept_name
 Order By average_salary desc;
 
+-- review
 
+select dept_name, round(avg(salary), 0) as avg_sal
+from salaries
+	join dept_emp
+		using (emp_no)
+	join departments
+		using (dept_no)
+group by dept_name;
 
 -- Bonus Find the names of all current employees, their department name, and their current manager's name.
 
