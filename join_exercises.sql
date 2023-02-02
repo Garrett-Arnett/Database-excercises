@@ -69,6 +69,18 @@ AND dept_name Like "customer service"
 group by title
 order by title;
 
+-- or 
+
+SELECT dept_no, dept_name, COUNT(*) num_employees
+FROM employees
+	JOIN dept_emp de 
+		USING (emp_no)
+	JOIN departments
+		USING (dept_no)
+WHERE de.to_date > NOW()
+GROUP BY dept_name;
+
+
 -- Find the current salary of all current managers.
 
 Select dept_name as "Department Name", concat(first_name," ", last_name), salary as Salary
@@ -145,6 +157,6 @@ Order By average_salary desc;
 
 
 
-
+select * from employees;
 
 
