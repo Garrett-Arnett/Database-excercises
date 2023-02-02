@@ -247,7 +247,7 @@ Order By average_salary desc;
 
 -- review
 
-select dept_name, round(avg(salary), 0) as avg_sal
+select dept_name, round(avg(salary), 0) as average_salary
 from salaries
 	join dept_emp
 		using (emp_no)
